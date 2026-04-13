@@ -283,7 +283,11 @@
     </div>
     <div class="checklist-item">
       <input type="checkbox" id="cl5" onchange="updateChecklist()">
-      <label for="cl5">Du ska ha stämt av med den som är uppsagd så att den är informerad om och godkänner ansökan till TRS. Detta behövs eftersom vi genom ansökan behandlar personuppgifter enligt Dataskyddsförordningen.</label>
+      <label for="cl5">Ev. uppgifter om lönegaranti. Om uppsägningen gjorts pga. konkurs måste uppgifter om lönegaranti bifogas.</label>
+    </div>
+    <div class="checklist-item">
+      <input type="checkbox" id="cl6" onchange="updateChecklist()">
+      <label for="cl6">Du ska ha stämt av med den som är uppsagd så att den är informerad om och godkänner ansökan till TRS. Detta behövs eftersom vi genom ansökan behandlar personuppgifter enligt Dataskyddsförordningen.</label>
     </div>
   </div>
 
@@ -534,15 +538,21 @@
   <!-- 3. Uppgifter om lönegaranti – visas bara för konkurs -->
   <div class="field-card" id="lonegaranti-card" style="display:none;">
     <div class="field-card-label">Uppgifter om lönegaranti</div>
-    <div class="bilaga-card">
-      <label class="radio-option"><input type="radio" name="bilaga-lg" value="upload" checked onchange="updateBilagaUI('lg-upload', this)"> Ladda upp uppgifter om lönegaranti nu</label>
-      <label class="radio-option"><input type="radio" name="bilaga-lg" value="post" onchange="updateBilagaUI('lg-upload', this)"> Jag skickar in uppgifter om lönegaranti per post</label>
-      <div class="file-upload-zone" id="lg-upload" onclick="this.querySelector('input[type=file]').click()">
-        <div class="file-upload-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="30" x2="26" y2="30"/></svg></div>
-        <div class="file-upload-text">Dra och släpp din fil här</div>
-        <div class="file-upload-link">Välj fil</div>
-        <div class="file-upload-max">Max 15 MB</div>
-        <input type="file" style="display:none" accept=".pdf,.jpg,.png,.doc,.docx">
+    <p style="font-size:15px; line-height:1.5; margin-bottom:var(--spacing-s);">Uppgifter om lönegaranti måste bifogas för att ansökan ska kunna hanteras.</p>
+    <div class="file-upload-zone" id="lg-upload" onclick="this.querySelector('input[type=file]').click()">
+      <div class="file-upload-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="30" x2="26" y2="30"/></svg></div>
+      <div class="file-upload-text">Dra och släpp din fil här</div>
+      <div class="file-upload-link">Välj fil</div>
+      <div class="file-upload-max">Max 15 MB</div>
+      <input type="file" style="display:none" accept=".pdf,.jpg,.png,.doc,.docx">
+    </div>
+    <div style="margin-top:16px;">
+      <label class="checkbox-option" style="display:flex; align-items:flex-start; gap:12px;">
+        <input type="checkbox" id="no-lg" onchange="toggleNoLg()" style="width:22px; height:22px; margin-right:0; flex-shrink:0;">
+        <span>Jag kan inte bifoga uppgifter om lönegaranti</span>
+      </label>
+      <div id="no-lg-info" style="display:none; margin-top:12px; padding:var(--spacing-s); background:var(--color-white); border-radius:var(--radius-sm); border:1px solid #ddd;">
+        <p style="font-size:15px; line-height:1.5; margin:0;">Du måste kontakta TRS på <strong>08 442 97 30</strong> eller <strong>trygghetsradet.trs@trs.se</strong> efter inskickad ansökan för att den ska kunna hanteras.</p>
       </div>
     </div>
   </div>
@@ -603,7 +613,7 @@
       <div class="review-row"><span class="review-label">Anställning upphör</span><span class="review-value">2025-11-30</span></div>
       <div class="review-sub-heading">Bilagor</div>
       <div class="review-row"><span class="review-label">Förhandlingsprotokoll</span><span class="review-value">Uppladdad</span></div>
-      <div class="review-row"><span class="review-label">Uppgifter om lönegaranti</span><span class="review-value">Skickas per post</span></div>
+      <div class="review-row"><span class="review-label">Uppgifter om lönegaranti</span><span class="review-value">Uppladdad</span></div>
     </div>
   </div>
 
@@ -681,11 +691,12 @@ function updateStepper() {
 }
 
 function updateChecklist() {
+  // cl5 (lönegaranti) är valfri – krävs inte för att gå vidare
   const allChecked = document.getElementById('cl1').checked &&
                      document.getElementById('cl2').checked &&
                      document.getElementById('cl3').checked &&
                      document.getElementById('cl4').checked &&
-                     document.getElementById('cl5').checked;
+                     document.getElementById('cl6').checked;
   document.getElementById('startBtn').disabled = !allChecked;
 }
 
@@ -707,9 +718,10 @@ function toggleNoFhp() {
   document.getElementById('fhp-step1-upload').style.display = checked ? 'none' : 'block';
 }
 
-function updateBilagaUI(uploadZoneId, radio) {
-  const zone = document.getElementById(uploadZoneId);
-  zone.style.display = (radio.value === 'upload') ? 'block' : 'none';
+function toggleNoLg() {
+  const checked = document.getElementById('no-lg').checked;
+  document.getElementById('no-lg-info').style.display = checked ? 'block' : 'none';
+  document.getElementById('lg-upload').style.display = checked ? 'none' : 'block';
 }
 
 function toggleHelp(btn) {
