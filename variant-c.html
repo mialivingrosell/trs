@@ -118,8 +118,7 @@
   .question-card { background: var(--color-sea-green-light); border: none; border-radius: var(--radius); padding: 20px var(--spacing-r); margin-bottom: var(--spacing-s); }
   .question-card .radio-group, .question-card .checkbox-group, .question-card .form-group { margin-bottom: 0; }
 
-  .helper-text { font-size: 14px; color: #666; margin-bottom: 8px; line-height: 22px; }
-  .helper-text-below { font-size: 14px; color: #666; margin-top: -12px; margin-bottom: 20px; line-height: 22px; }
+  .helper-text { font-size: 14px; color: #666; margin-top: 6px; line-height: 22px; }
   .note-text { font-size: 14px; color: #666; font-style: italic; margin: -8px 0 20px; }
   .info-paragraph { font-family: var(--font-body); background: var(--color-sea-green-light); padding: var(--spacing-s) 20px; border-radius: var(--radius); font-size: 17px; margin-bottom: var(--spacing-r); line-height: 26px; }
 
@@ -332,7 +331,7 @@
   </div>
 
   <div class="field-card">
-    <div class="field-card-label">Kontaktuppgifter</div>
+    <div class="field-card-label">Kontaktuppgifter till den uppsagde</div>
     <div class="form-row">
       <div class="form-group">
         <label>Förnamn</label>
@@ -361,6 +360,7 @@
       <div class="form-group">
         <label>E-post</label>
         <input type="text" id="email">
+        <p class="helper-text">Se till att e-postadressen gäller efter arbetets avslut.</p>
       </div>
       <div class="form-group">
         <label>Telefonnummer</label>
@@ -434,16 +434,16 @@
     <div class="form-row">
       <div class="form-group">
         <label>Aktuell grundlön</label>
-        <p class="helper-text">Observera att det är deltidslönen du ska ange vid deltidsanställning</p>
         <input type="text" placeholder="Kr/månad" id="salary">
+        <p class="helper-text">Observera att det är deltidslönen du ska ange vid deltidsanställning</p>
       </div>
       <div class="form-group" style="visibility:hidden;"></div>
     </div>
     <div class="form-row">
       <div class="form-group" style="margin-bottom:0;">
         <label>Har personen fasta tillägg eller förmåner?</label>
-        <p class="helper-text">T.ex. provision, tantiem, bonus, skift, jour eller beredskap</p>
         <input type="number" id="benefits" placeholder="Kr/månad">
+        <p class="helper-text">T.ex. provision, tantiem, bonus, skift, jour eller beredskap</p>
       </div>
       <div class="form-group" style="visibility:hidden;"></div>
     </div>
@@ -489,7 +489,7 @@
       <button class="btn btn-primary" onclick="goStep(3)">Nästa steg</button>
     </div>
   </div>
-  <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ansökan har sparats</p>
+  <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:flex-start; gap:6px; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px;"><polyline points="20 6 9 17 4 12"/></svg>Ansökningen har sparats men inte skickats in – du hittar den i Arbetsgivarportalen om du vill fortsätta senare.</p>
 </div>
 
 <!-- STEP 3: ORSAK (stepper steg 3) -->
@@ -510,15 +510,8 @@
   <!-- 2. Information om uppsägningen – visas när orsak är vald -->
   <div class="field-card" id="info-card" style="display:none;">
     <div class="field-card-label">Information om uppsägningen</div>
-    <div class="form-group" id="uppsagd-datum-group">
-      <label>Uppsagd datum</label>
-      <div class="date-input-wrap">
-        <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
-        <input type="text" id="orsak-uppsagd" style="max-width:220px;">
-      </div>
-    </div>
     <div class="form-group">
-      <label>Anställning upphör</label>
+      <label>Sista anställningsdagen</label>
       <div class="date-input-wrap">
         <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
         <input type="text" id="orsak-upphor" style="max-width:220px;">
@@ -564,7 +557,7 @@
       <button class="btn btn-primary" onclick="goStep(4)">Nästa steg</button>
     </div>
   </div>
-  <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ansökan har sparats</p>
+  <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:flex-start; gap:6px; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px;"><polyline points="20 6 9 17 4 12"/></svg>Ansökningen har sparats men inte skickats in – du hittar den i Arbetsgivarportalen om du vill fortsätta senare.</p>
 </div>
 
 <!-- STEP 4: GRANSKA OCH SKICKA IN (stepper steg 4) -->
@@ -573,7 +566,7 @@
 
   <div class="review-section">
     <div class="review-header">
-      <h3>1. Personuppgifter</h3>
+      <h3>1. Uppgifter om den uppsagde</h3>
       <a class="review-edit" onclick="goStep(1)">Ändra</a>
     </div>
     <div class="review-content">
@@ -583,6 +576,8 @@
       <div class="review-row"><span class="review-label">Postnummer och ort</span><span class="review-value">111 22 Stockholm</span></div>
       <div class="review-row"><span class="review-label">E-post</span><span class="review-value">anna.karlsson@example.com</span></div>
       <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">0701234567</span></div>
+      <div class="review-sub-heading">Bilagor</div>
+      <div class="review-row"><span class="review-label">Förhandlingsprotokoll</span><span class="review-value">Uppladdad</span></div>
     </div>
   </div>
 
@@ -592,13 +587,12 @@
       <a class="review-edit" onclick="goStep(2)">Ändra</a>
     </div>
     <div class="review-content">
-      <div class="review-row"><span class="review-label">Anställningsdatum</span><span class="review-value">2025-11-30</span></div>
-      <div class="review-row"><span class="review-label">Heltid</span><span class="review-value">Ja</span></div>
-      <div class="review-row"><span class="review-label">Grundlön</span><span class="review-value">35 000 kr/månad</span></div>
-      <div class="review-row"><span class="review-label">Fasta tillägg</span><span class="review-value">Ej ifyllt</span></div>
+      <div class="review-row"><span class="review-label">Ordinarie arbetstid</span><span class="review-value">Heltid</span></div>
+      <div class="review-row"><span class="review-label">Aktuell grundlön</span><span class="review-value">35 000 kr/månad</span></div>
+      <div class="review-row"><span class="review-label">Fasta tillägg eller förmåner</span><span class="review-value">Ej ifyllt</span></div>
       <div class="review-row"><span class="review-label">Lönebidrag</span><span class="review-value">Nej</span></div>
       <div class="review-row"><span class="review-label">Avgångsvederlag</span><span class="review-value">Nej</span></div>
-      <div class="review-row"><span class="review-label">Befattning/yrke</span><span class="review-value">Projektledare</span></div>
+      <div class="review-row"><span class="review-label">Senaste befattning eller yrke</span><span class="review-value">Projektledare</span></div>
       <div class="review-row"><span class="review-label">VD eller ägare/delägare</span><span class="review-value">Nej</span></div>
     </div>
   </div>
@@ -609,11 +603,9 @@
       <a class="review-edit" onclick="goStep(3)">Ändra</a>
     </div>
     <div class="review-content">
-      <div class="review-row"><span class="review-label">Orsak</span><span class="review-value">Konkurs - Uppsägning på grund av arbetsbrist</span></div>
-      <div class="review-row"><span class="review-label">Uppsagd datum</span><span class="review-value">2025-08-01</span></div>
-      <div class="review-row"><span class="review-label">Anställning upphör</span><span class="review-value">2025-11-30</span></div>
+      <div class="review-row"><span class="review-label">Orsak till uppsägning</span><span class="review-value">Konkurs - Uppsägning på grund av arbetsbrist</span></div>
+      <div class="review-row"><span class="review-label">Sista anställningsdagen</span><span class="review-value">2025-11-30</span></div>
       <div class="review-sub-heading">Bilagor</div>
-      <div class="review-row"><span class="review-label">Förhandlingsprotokoll</span><span class="review-value">Uppladdad</span></div>
       <div class="review-row"><span class="review-label">Uppgifter om lönegaranti</span><span class="review-value">Uppladdad</span></div>
     </div>
   </div>
@@ -631,7 +623,7 @@
       <button class="btn btn-primary" id="submitBtn" disabled onclick="submitForm()">Skicka in och avsluta ansökan</button>
     </div>
   </div>
-  <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:center; gap:6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Ansökan har sparats</p>
+  <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:flex-start; gap:6px; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px;"><polyline points="20 6 9 17 4 12"/></svg>Ansökningen har sparats men inte skickats in – du hittar den i Arbetsgivarportalen om du vill fortsätta senare.</p>
 </div>
 
 <!-- STEP 5: BEKRÄFTELSE -->
@@ -641,9 +633,12 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
     <h2>Ansökan har registrerats!</h2>
-    <p>Ansökan om stöd för den uppsagda har skickats till TRS. En bekräftelse skickas via e-post.</p>
-    <p>Du kan följa ärendet och hantera fler ansökningar via arbetsgivarportalen.</p>
-    <a href="#" class="btn btn-primary">Gå till arbetsgivarportalen →</a>
+    <p>Vi har mottagit din ansökan. Vi hör av oss om vi behöver kompletteringar – i annat fall kan ansökan anses vara godkänd.</p>
+    <p>En bekräftelse skickas via e-post. Du kan följa ärendet och hantera fler ansökningar via arbetsgivarportalen.</p>
+    <div class="submit-buttons" style="justify-content:center; margin-top:var(--spacing-s);">
+      <a href="#" class="btn btn-primary">Gå till arbetsgivarportalen →</a>
+      <button class="btn btn-outline" onclick="goStep(0)">Påbörja ny ansökan om stöd</button>
+    </div>
   </div>
 </div>
 
@@ -705,8 +700,6 @@ function updateOrsak() {
   const val = document.querySelector('input[name="orsak"]:checked')?.value;
   // Show info card when any orsak is selected
   document.getElementById('info-card').style.display = val ? 'block' : 'none';
-  // Hide "Uppsagd" date for Allianserna
-  document.getElementById('uppsagd-datum-group').style.display = (val === 'allianserna') ? 'none' : 'block';
   // Show procent for arbetsbrist and sjukdom (not konkurs or allianserna)
   document.getElementById('procent-group').style.display = (val === 'arbetsbrist' || val === 'sjukdom') ? 'block' : 'none';
   // Show lönegaranti only for konkurs
