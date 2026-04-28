@@ -141,6 +141,11 @@
   .date-input-wrap .date-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; width: 20px; height: 20px; color: var(--color-black); z-index: 1; }
   .date-input-wrap input { padding-left: 42px; }
 
+  /* Percent input with % suffix inside field */
+  .percent-input-wrap { position: relative; display: block; }
+  .percent-input-wrap input { padding-right: 36px; width: 100%; }
+  .percent-input-wrap .percent-suffix { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-grey-dark); font-size: 16px; }
+
   /* File upload drop zone */
   .file-upload-zone { border: 2px dashed #b0c4c3; border-radius: var(--radius); background: var(--color-white); padding: 32px; text-align: center; margin-top: 12px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
   .file-upload-zone:hover { border-color: var(--color-sea-green); background: #f0f7f7; }
@@ -200,6 +205,70 @@
   .footer h3 { font-size: 23px; font-weight: 600; margin-bottom: 8px; color: var(--color-black); }
   .footer p { font-size: 16px; color: #666; }
 
+  /* Blue-dark button (Hämta info) */
+  .btn-blue { background: var(--color-blue-dark); color: var(--color-white); border: none; }
+  .btn-blue:hover { background: #174c63; }
+
+  /* Personnummer field with inline green check */
+  .pnr-field-wrap { position: relative; flex: 1; }
+  .pnr-field-wrap .pnr-check-inline { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--color-sea-green-dark); display: none; }
+  .pnr-field-wrap.verified .pnr-check-inline { display: inline-flex; }
+
+  /* Organisations-info result block (after Hämta info on step 2) */
+  .orgnr-result { background: #b0d3d2; border-radius: var(--radius-sm); padding: 14px var(--spacing-s); margin-top: var(--spacing-s); font-size: 16px; line-height: 1.5; color: var(--color-black); display: none; }
+  .orgnr-result.visible { display: block; }
+  .orgnr-result strong { display: block; font-weight: 600; margin-bottom: 2px; }
+
+  /* Conditional sub-fields under Ja/Nej radios on step 4 */
+  .sub-fields { margin-top: var(--spacing-s); display: none; }
+  .sub-fields.visible { display: block; }
+  .sub-fields .form-group:last-child { margin-bottom: 0; }
+  .sub-fields label { font-weight: 500; font-size: 15px; }
+
+  /* Half-width inputs on Övrigt-stegen (form 2 step 4 & form 3 step 2) — except textarea */
+  #f2-step4 .form-group,
+  #f3-step2 .form-group { max-width: 50%; }
+  #f2-step4 .form-group:has(textarea),
+  #f3-step2 .form-group:has(textarea) { max-width: 100%; }
+  #f2-step4 .form-row .form-group,
+  #f3-step2 .form-row .form-group { max-width: 100%; }
+  @media (max-width: 600px) {
+    #f2-step4 .form-group,
+    #f3-step2 .form-group { max-width: 100%; }
+  }
+
+  /* Borderless previous-step button */
+  .btn-link { background: none; border: none; color: var(--color-grey-dark); padding: 0 8px; }
+  .btn-link:hover { color: var(--color-fandango); background: none; }
+
+  /* Tab bar (top-level form switcher) */
+  .tab-bar { display: flex; max-width: 900px; margin: 0 auto; padding: 12px var(--spacing-r) 0; gap: 4px; border-bottom: 1px solid #e5e7eb; }
+  .tab { background: none; border: none; padding: 12px 20px; font-size: 16px; font-family: var(--font-ui); font-weight: 500; color: #666; cursor: pointer; border-bottom: 3px solid transparent; transition: color 0.15s, border-color 0.15s; margin-bottom: -1px; }
+  .tab:hover { color: var(--color-grey-dark); }
+  .tab.active { color: var(--color-fandango); border-bottom-color: var(--color-fandango); font-weight: 600; }
+  @media (max-width: 600px) {
+    .tab-bar { padding: 8px 8px 0; flex-wrap: wrap; }
+    .tab { padding: 10px 12px; font-size: 14px; }
+  }
+
+  /* Form tab visibility */
+  .form-tab { display: none; }
+  .form-tab.active { display: block; }
+
+  /* Override review-edit colour to match master design (fandango) */
+  .review-edit { color: var(--color-fandango); }
+  .review-edit:hover { color: var(--color-fandango-dark); }
+
+  /* Extra-employment card header (with remove link) */
+  .extra-emp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-s); }
+  .extra-emp-header .field-card-label { margin-bottom: 0; }
+  .extra-emp-remove { background: none; border: none; color: var(--color-fandango); font-size: 14px; font-family: var(--font-ui); cursor: pointer; padding: 0; }
+  .extra-emp-remove:hover { text-decoration: underline; color: var(--color-fandango-dark); }
+
+  /* Select styled like inputs */
+  .form-group select { width: 100%; padding: 11px 14px; border: 1px solid var(--color-black); border-radius: var(--radius); font-size: 16px; font-family: var(--font-ui); height: 48px; background: var(--color-white); }
+  .form-group select:focus { outline: none; border-color: var(--color-fandango); box-shadow: 0 0 0 2px rgba(177,65,140,0.2); }
+
   /* Step content */
   .step-content { display: none; }
   .step-content.active { display: block; }
@@ -215,10 +284,21 @@
 </head>
 <body>
 
+<div class="tab-bar" role="tablist">
+  <button class="tab active" data-form="form1" role="tab" onclick="switchTab('form1')">Uppsagd medarbetare</button>
+  <button class="tab" data-form="form2" role="tab" onclick="switchTab('form2')">Tidsbegränsad anställning</button>
+  <button class="tab" data-form="form3" role="tab" onclick="switchTab('form3')">Tacka ja till stöd</button>
+</div>
+
 <div class="header">
   <div class="logo">trs<span class="dot">.</span><span class="sep">|</span><span class="title">Ansökan</span></div>
   <a href="#" class="header-link">trs.se</a>
 </div>
+
+<!-- ============================================================ -->
+<!-- FORM 1: Ansökan om omställningsstöd för uppsagd medarbetare   -->
+<!-- ============================================================ -->
+<div class="form-tab active" id="form1">
 
 <div class="stepper-bar hidden" id="stepperBar">
   <div class="stepper">
@@ -392,9 +472,9 @@
   </div>
 
   <div class="bottom-bar">
-    <button class="btn btn-outline" onclick="goStep(0)">Föregående</button>
+    <button class="btn btn-link" onclick="goStep(0)">‹ Föregående steg</button>
     <div class="right-buttons">
-      <button class="btn btn-primary" onclick="goStep(2)">Nästa steg</button>
+      <button class="btn btn-primary" onclick="goStep(2)">Nästa steg →</button>
     </div>
   </div>
 </div>
@@ -421,8 +501,9 @@
       </div>
       <div id="deltid-procent" style="display:none; margin-top:8px;">
         <label style="font-weight:500; font-size:15px; margin-bottom:6px; display:block;">Hur många procent av heltid?</label>
-        <div style="display:flex;align-items:center;gap:4px;">
-          <input type="number" id="deltid-procent-input" style="max-width:120px; width:100%; padding:11px 14px; border:1px solid var(--color-black); border-radius:var(--radius); font-size:16px; height:48px;"> <span>%</span>
+        <div class="percent-input-wrap" style="max-width:200px;">
+          <input type="number" id="deltid-procent-input" style="padding:11px 36px 11px 14px; border:1px solid var(--color-black); border-radius:var(--radius); font-size:16px; height:48px;">
+          <span class="percent-suffix">%</span>
         </div>
       </div>
     </div>
@@ -484,9 +565,9 @@
   </div>
 
   <div class="bottom-bar">
-    <button class="btn btn-outline" onclick="goStep(1)">Föregående</button>
+    <button class="btn btn-link" onclick="goStep(1)">‹ Föregående steg</button>
     <div class="right-buttons">
-      <button class="btn btn-primary" onclick="goStep(3)">Nästa steg</button>
+      <button class="btn btn-primary" onclick="goStep(3)">Nästa steg →</button>
     </div>
   </div>
   <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:flex-start; gap:6px; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px;"><polyline points="20 6 9 17 4 12"/></svg>Ansökningen har sparats men inte skickats in – du hittar den i Arbetsgivarportalen om du vill fortsätta senare.</p>
@@ -519,8 +600,9 @@
     </div>
     <div class="form-group" id="procent-group" style="display:none;">
       <label>Uppsagd på hur många procent</label>
-      <div style="display:flex;align-items:center;gap:4px;">
-        <input type="number" id="orsak-procent" style="max-width:220px;"> <span>%</span>
+      <div class="percent-input-wrap" style="max-width:220px;">
+        <input type="number" id="orsak-procent">
+        <span class="percent-suffix">%</span>
       </div>
     </div>
     <div class="form-group" style="margin-bottom:0;">
@@ -552,9 +634,9 @@
   </div>
 
   <div class="bottom-bar">
-    <button class="btn btn-outline" onclick="goStep(2)">Föregående</button>
+    <button class="btn btn-link" onclick="goStep(2)">‹ Föregående steg</button>
     <div class="right-buttons">
-      <button class="btn btn-primary" onclick="goStep(4)">Nästa steg</button>
+      <button class="btn btn-primary" onclick="goStep(4)">Nästa steg →</button>
     </div>
   </div>
   <p style="font-size:14px; color:#666; margin-top:12px; display:flex; align-items:flex-start; gap:6px; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-sea-green-dark)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px;"><polyline points="20 6 9 17 4 12"/></svg>Ansökningen har sparats men inte skickats in – du hittar den i Arbetsgivarportalen om du vill fortsätta senare.</p>
@@ -618,7 +700,7 @@
   </div>
 
   <div class="bottom-bar">
-    <button class="btn btn-outline" onclick="goStep(3)">Föregående</button>
+    <button class="btn btn-link" onclick="goStep(3)">‹ Föregående steg</button>
     <div class="right-buttons">
       <button class="btn btn-primary" id="submitBtn" disabled onclick="submitForm()">Skicka in och avsluta ansökan</button>
     </div>
@@ -643,6 +725,802 @@
 </div>
 
 </div><!-- end .main -->
+</div><!-- end #form1 -->
+
+
+<!-- ============================================================ -->
+<!-- FORM 2: Ansökan när tidsbegränsad anställning upphör          -->
+<!-- ============================================================ -->
+<div class="form-tab" id="form2">
+
+<div class="stepper-bar hidden" id="f2-stepperBar">
+  <div class="stepper">
+    <div class="step-item" data-step="1">
+      <div class="step-circle active" id="f2-sc1">1</div>
+      <div class="step-label active" id="f2-sl1">Om dig</div>
+    </div>
+    <div class="step-item" data-step="2">
+      <div class="step-circle" id="f2-sc2">2</div>
+      <div class="step-label" id="f2-sl2">Arbetsgivare</div>
+    </div>
+    <div class="step-item" data-step="3">
+      <div class="step-circle" id="f2-sc3">3</div>
+      <div class="step-label" id="f2-sl3">Anställning</div>
+    </div>
+    <div class="step-item" data-step="4">
+      <div class="step-circle" id="f2-sc4">4</div>
+      <div class="step-label" id="f2-sl4">Övrigt</div>
+    </div>
+    <div class="step-item" data-step="5">
+      <div class="step-circle" id="f2-sc5">5</div>
+      <div class="step-label" id="f2-sl5">Granska</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- F2 STEP 0: FÖRSIDA (ej i stepper) -->
+<div class="step-content active" id="f2-step0">
+  <h2>Ansökan tidsbegränsad anställning upphör</h2>
+  <p style="font-weight:600; font-size:17px; margin-bottom:6px;">Detta behöver du för att fullfölja ansökan.</p>
+  <p style="font-size:15px; line-height:1.5; margin-bottom:var(--spacing-r);">Kontrollera att du har följande uppgifter tillgängliga innan du börjar. Kryssa i varje punkt för att bekräfta.</p>
+
+  <div class="field-card">
+    <div class="checklist-item">
+      <input type="checkbox" id="f2-cl1" onchange="f2UpdateChecklist()">
+      <label for="f2-cl1">Organisationsnummer till din senaste arbetsgivare</label>
+    </div>
+    <div class="checklist-item">
+      <input type="checkbox" id="f2-cl2" onchange="f2UpdateChecklist()">
+      <label for="f2-cl2">Kontaktperson hos din senaste arbetsgivare. Namn, telefonnummer och e-postadress.</label>
+    </div>
+    <div class="checklist-item">
+      <input type="checkbox" id="f2-cl3" onchange="f2UpdateChecklist()">
+      <label for="f2-cl3">Uppgifter om anställningen: anställningsdatum och arbetstid, lön m.m.</label>
+    </div>
+    <div class="checklist-item">
+      <input type="checkbox" id="f2-cl4" onchange="f2UpdateChecklist()">
+      <label for="f2-cl4">Arbetsgivarintyg från senaste anställningen</label>
+      <div style="width:100%; padding:8px 0 4px 34px; font-size:14px; color:#555; line-height:1.5;">Ett arbetsgivarintyg styrker din anställning och ligger till grund för bedömningen av ditt stöd. Be din arbetsgivare om intyget innan din anställning upphör.</div>
+    </div>
+    <div class="checklist-item">
+      <input type="checkbox" id="f2-cl5" onchange="f2UpdateChecklist()">
+      <label for="f2-cl5">Eventuellt: uppgifter om tidigare anställningar inklusive arbetsgivarintyg eller anställningsintyg</label>
+      <div style="width:100%; padding:8px 0 4px 34px; font-size:14px; color:#555; line-height:1.5;">Om du behöver komma upp i 12 månaders anställning under de senaste 36 månaderna behöver du ange tidigare anställningar och bifoga intyg för dem.</div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div></div>
+    <div class="right-buttons">
+      <span id="f2-checklist-msg" style="font-size:15px; color:#666;">Checka av alla punkter för att fortsätta</span>
+      <button class="btn btn-primary" id="f2-startBtn" disabled onclick="goStep(1)">Starta ansökan →</button>
+    </div>
+  </div>
+</div>
+
+<!-- F2 STEP 1: OM DIG -->
+<div class="step-content" id="f2-step1">
+  <h2>Uppgifter om dig som söker</h2>
+
+  <div class="field-card">
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Personnummer</label>
+      <div style="display:flex; gap:var(--spacing-s); align-items:flex-start; max-width:60%;">
+        <div class="pnr-field-wrap" id="f2-pnr-wrap">
+          <input type="text" id="f2-pnr" placeholder="ÅÅMMDD-XXXX" style="width:100%; padding-right:44px;">
+          <span class="pnr-check-inline">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+        </div>
+        <button class="btn btn-blue" style="flex-shrink:0; font-size:16px; padding:0 20px;" onclick="f2HamtaPerson()">Hämta info</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="form-row">
+      <div class="form-group"><label>Förnamn</label><input type="text" id="f2-fname"></div>
+      <div class="form-group"><label>Efternamn</label><input type="text" id="f2-lname"></div>
+    </div>
+    <div class="form-group">
+      <label>Gatuadress</label>
+      <input type="text" id="f2-address">
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Postnummer</label><input type="text" id="f2-zip"></div>
+      <div class="form-group"><label>Ort</label><input type="text" id="f2-city"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:0;">
+      <div class="form-group" style="margin-bottom:0;"><label>Telefonnummer</label><input type="text" id="f2-phone"></div>
+      <div class="form-group" style="margin-bottom:0;"><label>E-post</label><input type="text" id="f2-email"></div>
+    </div>
+  </div>
+
+  <div class="consent-top">
+    <label>
+      <input type="checkbox" id="f2-consent-step1" style="width:22px; height:22px;">
+      Jag intygar att dessa uppgifter är riktiga och samtycker till att Trygghetsrådet TRS behandlar mina personuppgifter i den omfattning som krävs för att jag ska kunna få stöd.
+    </label>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(0)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(2)">Nästa steg →</button></div>
+  </div>
+</div>
+
+<!-- F2 STEP 2: ARBETSGIVARE -->
+<div class="step-content" id="f2-step2">
+  <h2>Uppgifter om din senaste arbetsgivare</h2>
+
+  <div class="field-card">
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Organisationsnummer</label>
+      <div style="display:flex; gap:var(--spacing-s); align-items:flex-start; max-width:60%;">
+        <input type="text" id="f2-orgnr" placeholder="XXXXXX-XXXX" style="flex:1;">
+        <button class="btn btn-blue" style="flex-shrink:0; font-size:16px; padding:0 20px;" onclick="f2HamtaOrg()">Hämta info</button>
+      </div>
+      <div class="orgnr-result" id="f2-orgnr-result" style="max-width:60%;">
+        <strong>Trygghetsrådet TRS</strong>
+        Rehnsgatan 11<br>
+        113 57 Stockholm
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="field-card-label">Kontaktperson hos arbetsgivare</div>
+    <div class="form-row">
+      <div class="form-group"><label>Förnamn</label><input type="text" id="f2-cp-fname"></div>
+      <div class="form-group"><label>Efternamn</label><input type="text" id="f2-cp-lname"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:0;">
+      <div class="form-group" style="margin-bottom:0;"><label>Telefonnummer</label><input type="text" id="f2-cp-phone"></div>
+      <div class="form-group" style="margin-bottom:0;"><label>E-post</label><input type="text" id="f2-cp-email"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(1)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(3)">Nästa steg →</button></div>
+  </div>
+</div>
+
+<!-- F2 STEP 3: ANSTÄLLNING -->
+<div class="step-content" id="f2-step3">
+  <h2>Senaste anställning (inom TRS område)</h2>
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">För att kunna få stöd av TRS måste du under de senaste 36 månaderna ha varit anställd minst 12 månader hos en eller flera arbetsgivare, alla anställningar måste inte ha varit hos en TRS-ansluten, bara den senaste. Anställningstiden behöver inte ha varit sammanhängande och den behöver inte ha varit hos samma arbetsgivare hela tiden.</p>
+
+  <div class="field-card">
+    <div class="field-card-label">Anställningsperiod</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Började anställning</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text" id="f2-emp-start">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Anställning upphörde</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text" id="f2-emp-end">
+        </div>
+      </div>
+    </div>
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Ordinarie arbetstid</label>
+      <div class="radio-inline">
+        <label class="radio-option"><input type="radio" name="f2-worktime" value="Heltid" onchange="f2ToggleDeltid()"> Heltid</label>
+        <label class="radio-option"><input type="radio" name="f2-worktime" value="Deltid" onchange="f2ToggleDeltid()"> Deltid</label>
+      </div>
+      <div id="f2-deltid-procent" style="display:none; margin-top:8px;">
+        <label style="font-weight:500; font-size:15px; margin-bottom:6px; display:block;">Hur många procent av heltid?</label>
+        <div class="percent-input-wrap" style="max-width:200px;">
+          <input type="number" id="f2-deltid-input" style="padding:11px 36px 11px 14px; border:1px solid var(--color-black); border-radius:var(--radius); font-size:16px; height:48px;">
+          <span class="percent-suffix">%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="field-card-label">Om din anställning</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Aktuell grundlön</label>
+        <input type="text" id="f2-salary" placeholder="kr/månad">
+        <p class="helper-text">Observera att det är deltidslönen du ska ange vid deltidsanställning</p>
+      </div>
+      <div class="form-group">
+        <label>Gäller från</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text" id="f2-salary-from">
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Fasta tillägg eller förmåner</label>
+      <input type="text" id="f2-benefits" placeholder="kr/månad">
+      <p class="helper-text">T.ex. provision, tantiem, bonus, skift, jour eller beredskap</p>
+    </div>
+    <div class="form-group">
+      <label>Senaste befattning/yrke</label>
+      <input type="text" id="f2-jobtitle">
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Bifoga arbetsgivarintyg</label>
+      <div class="file-upload-zone" onclick="this.querySelector('input[type=file]').click()">
+        <div class="file-upload-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="30" x2="26" y2="30"/></svg></div>
+        <div class="file-upload-text">Dra och släpp din fil här</div>
+        <div class="file-upload-link">Välj fil</div>
+        <div class="file-upload-max">Max 15 MB</div>
+        <input type="file" style="display:none" accept=".pdf,.jpg,.png,.doc,.docx">
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:32px;">Tidigare anställningar</h3>
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">Du behöver ha varit anställd minst 12 månader under de senaste 36 månaderna för att kunna få stöd av TRS. Lägg till fler anställningar om det behövs för att komma upp i sammanlagt 12 månader.</p>
+
+  <div id="f2-extra-employments"></div>
+
+  <button type="button" class="btn btn-secondary" onclick="addEmployment()">+ Lägg till fler anställningar</button>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(2)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(4)">Nästa steg →</button></div>
+  </div>
+</div>
+
+<!-- F2 STEP 4: ÖVRIGT -->
+<div class="step-content" id="f2-step4">
+  <h2>Övrig information om dig</h2>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Högsta utbildning</label>
+      <label class="radio-option"><input type="radio" name="f2-utbildning" value="Grundskola"> Grundskola</label>
+      <label class="radio-option"><input type="radio" name="f2-utbildning" value="Gymnasium"> Gymnasium</label>
+      <label class="radio-option"><input type="radio" name="f2-utbildning" value="Folkhögskola"> Folkhögskola</label>
+      <label class="radio-option"><input type="radio" name="f2-utbildning" value="Högskola/Universitet"> Högskola/Universitet</label>
+      <label class="radio-option"><input type="radio" name="f2-utbildning" value="Yrkesinriktad utbildning"> Yrkesinriktad utbildning</label>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du sjukersättning?</label>
+      <label class="radio-option"><input type="radio" name="f2-sjukers" value="Ja" onchange="f2ToggleSub('sjukers', true)"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f2-sjukers" value="Nej" onchange="f2ToggleSub('sjukers', false)"> Nej</label>
+      <div class="sub-fields" id="f2-sub-sjukers">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Från och med</label>
+            <div class="date-input-wrap">
+              <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+              <input type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Procent av heltid</label>
+            <div class="percent-input-wrap">
+              <input type="number">
+              <span class="percent-suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du förtida uttag av pension?</label>
+      <label class="radio-option"><input type="radio" name="f2-pension" value="Ja" onchange="f2ToggleSub('pension', true)"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f2-pension" value="Nej" onchange="f2ToggleSub('pension', false)"> Nej</label>
+      <div class="sub-fields" id="f2-sub-pension">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Från och med</label>
+            <div class="date-input-wrap">
+              <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+              <input type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Procent av heltid</label>
+            <div class="percent-input-wrap">
+              <input type="number">
+              <span class="percent-suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Är du medlem i någon a-kassa?</label>
+      <label class="radio-option"><input type="radio" name="f2-akassa" value="Ja"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f2-akassa" value="Nej"> Nej</label>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du redan fått en ny anställning (valfritt)?</label>
+      <p class="helper-text" style="margin:0 0 12px;">Om Ja. Skicka in ansökan ändå, efterskydd kan gälla om du blir uppsagd från det nya arbetet också eller om det är en tidsbegränsad anställning.</p>
+      <label class="radio-option"><input type="radio" name="f2-ny" value="Ja" onchange="f2ToggleSub('ny', true)"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f2-ny" value="Nej" onchange="f2ToggleSub('ny', false)"> Nej</label>
+      <div class="sub-fields" id="f2-sub-ny">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Din nya anställningsform</label>
+            <select>
+              <option value="">Välj anställningsform</option>
+              <option value="Tillsvidareanställning">Tillsvidareanställning</option>
+              <option value="Tidsbegränsad anställning">Tidsbegränsad anställning</option>
+              <option value="Provanställning">Provanställning</option>
+              <option value="Visstidsanställning">Visstidsanställning</option>
+              <option value="Annat">Annat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Från och med</label>
+            <div class="date-input-wrap">
+              <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+              <input type="text">
+            </div>
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Organisationsnummer</label>
+            <input type="text" placeholder="XXXXXX-XXXX">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Organisationsnamn</label>
+            <input type="text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Övriga upplysningar om dig (valfritt)</label>
+      <textarea id="f2-ovrigt" rows="4"></textarea>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(3)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(5)">Nästa steg →</button></div>
+  </div>
+</div>
+
+<!-- F2 STEP 5: GRANSKA -->
+<div class="step-content" id="f2-step5">
+  <h2>Granska och skicka</h2>
+
+  <div class="review-section">
+    <div class="review-header">
+      <h3>1. Om dig</h3>
+      <a class="review-edit" onclick="goStep(1)">Ändra</a>
+    </div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Personnummer</span><span class="review-value">19811030-6492</span></div>
+      <div class="review-row"><span class="review-label">Namn</span><span class="review-value">Pia Andersson</span></div>
+      <div class="review-row"><span class="review-label">Gatuadress</span><span class="review-value">Storgatan 14b lgh 2003</span></div>
+      <div class="review-row"><span class="review-label">Postnummer och ort</span><span class="review-value">114 40 Stockholm</span></div>
+      <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">072 766 61 82</span></div>
+      <div class="review-row"><span class="review-label">E-post</span><span class="review-value">pia.andersson@example.com</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header">
+      <h3>2. Din senaste arbetsgivare</h3>
+      <a class="review-edit" onclick="goStep(2)">Ändra</a>
+    </div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Organisationsnummer</span><span class="review-value">802400-6853</span></div>
+      <div class="review-row"><span class="review-label">Företag</span><span class="review-value">Trygghetsrådet TRS</span></div>
+      <div class="review-row"><span class="review-label">Adress</span><span class="review-value">Rehnsgatan 11, 113 57 Stockholm</span></div>
+      <div class="review-sub-heading">Kontaktperson</div>
+      <div class="review-row"><span class="review-label">Namn</span><span class="review-value">Petter Karlsson</span></div>
+      <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">072 861 48 34</span></div>
+      <div class="review-row"><span class="review-label">E-post</span><span class="review-value">petter.k@example.com</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header">
+      <h3>3. Din senaste anställning</h3>
+      <a class="review-edit" onclick="goStep(3)">Ändra</a>
+    </div>
+    <div class="review-content">
+      <div class="review-sub-heading" style="border-top:none; padding-top:0; margin-top:0;">Anställningsperiod</div>
+      <div class="review-row"><span class="review-label">Började anställning</span><span class="review-value">2022-02-01</span></div>
+      <div class="review-row"><span class="review-label">Anställning upphörde</span><span class="review-value">2026-02-01</span></div>
+      <div class="review-row"><span class="review-label">Arbetstid</span><span class="review-value">Deltid</span></div>
+      <div class="review-row"><span class="review-label">Upphört i procent</span><span class="review-value">100 %</span></div>
+      <div class="review-sub-heading">Om din anställning</div>
+      <div class="review-row"><span class="review-label">Grundlön/månad</span><span class="review-value">20 000 kr</span></div>
+      <div class="review-row"><span class="review-label">Gäller från</span><span class="review-value">2025-05-01</span></div>
+      <div class="review-row"><span class="review-label">Fasta tillägg</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Befattning/yrke</span><span class="review-value">Designer</span></div>
+      <div class="review-row"><span class="review-label">Arbetsgivarintyg</span><span class="review-value">intyg_2025.pdf</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header">
+      <h3>4. Övriga uppgifter</h3>
+      <a class="review-edit" onclick="goStep(4)">Ändra</a>
+    </div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Högsta utbildning</span><span class="review-value">Högskola/Universitet</span></div>
+      <div class="review-row"><span class="review-label">Sjukersättning</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Förtida uttag av pension</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Medlem i a-kassa</span><span class="review-value">Ja</span></div>
+      <div class="review-row"><span class="review-label">Ny anställning</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Övriga upplysningar</span><span class="review-value">–</span></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(4)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(6)">Spara och skicka</button></div>
+  </div>
+</div>
+
+<!-- F2 STEP 6: BEKRÄFTELSE -->
+<div class="step-content" id="f2-step6">
+  <div class="confirmation-page">
+    <div class="confirmation-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Ansökan har skickats!</h2>
+    <p>Vi har mottagit din ansökan om stöd. En bekräftelse skickas via e-post.</p>
+    <p>Du kommer höra från oss inom kort med information om nästa steg.</p>
+    <div class="submit-buttons" style="justify-content:center; margin-top:var(--spacing-s);">
+      <button class="btn btn-outline" onclick="goStep(1)">Påbörja ny ansökan</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+</div><!-- end #form2 -->
+
+
+<!-- ============================================================ -->
+<!-- FORM 3: Tacka ja till stöd                                    -->
+<!-- ============================================================ -->
+<div class="form-tab" id="form3">
+
+<div class="stepper-bar" id="f3-stepperBar">
+  <div class="stepper">
+    <div class="step-item" data-step="1">
+      <div class="step-circle active" id="f3-sc1">1</div>
+      <div class="step-label active" id="f3-sl1">Granska uppgifter</div>
+    </div>
+    <div class="step-item" data-step="2">
+      <div class="step-circle" id="f3-sc2">2</div>
+      <div class="step-label" id="f3-sl2">Om dig</div>
+    </div>
+    <div class="step-item" data-step="3">
+      <div class="step-circle" id="f3-sc3">3</div>
+      <div class="step-label" id="f3-sl3">Granska & skicka</div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- F3 STEP 1: GRANSKA LÄMNADE UPPGIFTER -->
+<div class="step-content active" id="f3-step1">
+  <h2>Granska lämnade uppgifter</h2>
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">Här är uppgifterna som din arbetsgivare har skickat in till TRS. Kontrollera att allt stämmer innan du går vidare.</p>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Arbetsgivarinformation</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Organisationsnummer</span><span class="review-value">802400-6853</span></div>
+      <div class="review-row"><span class="review-label">Företag</span><span class="review-value">Trygghetsrådet TRS</span></div>
+      <div class="review-row"><span class="review-label">Adress</span><span class="review-value">Rehnsgatan 11, 113 57 Stockholm</span></div>
+      <div class="review-sub-heading">Kontaktperson hos arbetsgivare</div>
+      <div class="review-row"><span class="review-label">Namn</span><span class="review-value">Pontus Hannegård</span></div>
+      <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">0705 73 19 39</span></div>
+      <div class="review-row"><span class="review-label">E-post</span><span class="review-value">pontus.hannegard@trs.se</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Dina uppgifter</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Personnummer</span><span class="review-value">19850615-1234</span></div>
+      <div class="review-row"><span class="review-label">Namn</span><span class="review-value">Erik Lindqvist</span></div>
+      <div class="review-row"><span class="review-label">Postadress</span><span class="review-value">Storgatan 5</span></div>
+      <div class="review-row"><span class="review-label">Postnummer och ort</span><span class="review-value">111 22 Stockholm</span></div>
+      <div class="review-row"><span class="review-label">E-post</span><span class="review-value">erik.lindqvist@example.com</span></div>
+      <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">070 123 45 67</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Anställningsinformation</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Anställningsdatum</span><span class="review-value">2020-01-01</span></div>
+      <div class="review-row"><span class="review-label">Heltid</span><span class="review-value">Ja</span></div>
+      <div class="review-row"><span class="review-label">Grundlön</span><span class="review-value">100 000 kr, från 2020-01-01</span></div>
+      <div class="review-row"><span class="review-label">Lönebidrag</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Annat anställningsstöd</span><span class="review-value">–</span></div>
+      <div class="review-row"><span class="review-label">Fasta tillägg eller förmåner</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Kollektivavtalad försäkring</span><span class="review-value">Collectum ITP1</span></div>
+      <div class="review-row"><span class="review-label">Roll/Titel</span><span class="review-value">Designer</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Orsak till uppsägning</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Orsak</span><span class="review-value">Uppsagd – Arbetsbrist</span></div>
+      <div class="review-row"><span class="review-label">Uppsagd</span><span class="review-value">2026-04-04</span></div>
+      <div class="review-row"><span class="review-label">Anställning upphör</span><span class="review-value">2026-04-04</span></div>
+      <div class="review-row"><span class="review-label">Uppsagd på hur många procent</span><span class="review-value">100 %</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:32px;">Tidigare anställningar inom TRS-område</h3>
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">Om du har varit tidsbegränsat anställd och vill åberopa fler anställningar inom TRS-område kan du ange dem här. Ange organisationsnummer så ser vi om det är en ansluten organisation.</p>
+
+  <div id="f3-extra-employments"></div>
+
+  <button type="button" class="btn btn-secondary" onclick="f3AddEmployment()">+ Lägg till fler anställningar</button>
+
+  <div class="bottom-bar">
+    <div></div>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(2)">Nästa steg →</button></div>
+  </div>
+</div>
+
+<!-- F3 STEP 2: OM DIG -->
+<div class="step-content" id="f3-step2">
+  <h2>Uppgifter om dig som blivit uppsagd</h2>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Högsta utbildning</label>
+      <label class="radio-option"><input type="radio" name="f3-utbildning" value="Grundskola"> Grundskola</label>
+      <label class="radio-option"><input type="radio" name="f3-utbildning" value="Gymnasium"> Gymnasium</label>
+      <label class="radio-option"><input type="radio" name="f3-utbildning" value="Folkhögskola"> Folkhögskola</label>
+      <label class="radio-option"><input type="radio" name="f3-utbildning" value="Högskola/Universitet"> Högskola/Universitet</label>
+      <label class="radio-option"><input type="radio" name="f3-utbildning" value="Yrkesinriktad utbildning"> Yrkesinriktad utbildning</label>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du sjukersättning?</label>
+      <label class="radio-option"><input type="radio" name="f3-sjukers" value="Ja" onchange="f3ToggleSub('sjukers', true)"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f3-sjukers" value="Nej" onchange="f3ToggleSub('sjukers', false)"> Nej</label>
+      <div class="sub-fields" id="f3-sub-sjukers">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Från och med</label>
+            <div class="date-input-wrap">
+              <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+              <input type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Procent av heltid</label>
+            <div class="percent-input-wrap">
+              <input type="number">
+              <span class="percent-suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du förtida uttag av pension?</label>
+      <label class="radio-option"><input type="radio" name="f3-pension" value="Ja" onchange="f3ToggleSub('pension', true)"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f3-pension" value="Nej" onchange="f3ToggleSub('pension', false)"> Nej</label>
+      <div class="sub-fields" id="f3-sub-pension">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Från och med</label>
+            <div class="date-input-wrap">
+              <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+              <input type="text">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Procent av heltid</label>
+            <div class="percent-input-wrap">
+              <input type="number">
+              <span class="percent-suffix">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Är du medlem i någon a-kassa?</label>
+      <label class="radio-option"><input type="radio" name="f3-akassa" value="Ja"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f3-akassa" value="Nej"> Nej</label>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du redan fått en ny anställning (valfritt)?</label>
+      <p class="helper-text" style="margin:0 0 12px;">Om Ja. Skicka in ansökan ändå, efterskydd kan gälla om du blir uppsagd från det nya arbetet också eller om det är en tidsbegränsad anställning.</p>
+      <label class="radio-option"><input type="radio" name="f3-ny" value="Ja" onchange="f3ToggleSub('ny', true)"> Ja</label>
+      <label class="radio-option"><input type="radio" name="f3-ny" value="Nej" onchange="f3ToggleSub('ny', false)"> Nej</label>
+      <div class="sub-fields" id="f3-sub-ny">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Din nya anställningsform</label>
+            <select>
+              <option value="">Välj anställningsform</option>
+              <option value="Tillsvidareanställning">Tillsvidareanställning</option>
+              <option value="Tidsbegränsad anställning">Tidsbegränsad anställning</option>
+              <option value="Provanställning">Provanställning</option>
+              <option value="Visstidsanställning">Visstidsanställning</option>
+              <option value="Annat">Annat</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Från och med</label>
+            <div class="date-input-wrap">
+              <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+              <input type="text">
+            </div>
+          </div>
+        </div>
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Organisationsnummer</label>
+            <input type="text" placeholder="XXXXXX-XXXX">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Organisationsnamn</label>
+            <input type="text">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Övriga upplysningar om dig (valfritt)</label>
+      <textarea id="f3-ovrigt" rows="4"></textarea>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(1)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(3)">Nästa steg →</button></div>
+  </div>
+</div>
+
+<!-- F3 STEP 3: GRANSKA OCH SKICKA IN -->
+<div class="step-content" id="f3-step3">
+  <h2>Granska och skicka in ansökan</h2>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Arbetsgivarinformation</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Organisationsnummer</span><span class="review-value">802400-6853</span></div>
+      <div class="review-row"><span class="review-label">Företag</span><span class="review-value">Trygghetsrådet TRS</span></div>
+      <div class="review-row"><span class="review-label">Adress</span><span class="review-value">Rehnsgatan 11, 113 57 Stockholm</span></div>
+      <div class="review-sub-heading">Kontaktperson hos arbetsgivare</div>
+      <div class="review-row"><span class="review-label">Namn</span><span class="review-value">Pontus Hannegård</span></div>
+      <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">0705 73 19 39</span></div>
+      <div class="review-row"><span class="review-label">E-post</span><span class="review-value">pontus.hannegard@trs.se</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Dina uppgifter</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Personnummer</span><span class="review-value">19850615-1234</span></div>
+      <div class="review-row"><span class="review-label">Namn</span><span class="review-value">Erik Lindqvist</span></div>
+      <div class="review-row"><span class="review-label">Postadress</span><span class="review-value">Storgatan 5</span></div>
+      <div class="review-row"><span class="review-label">Postnummer och ort</span><span class="review-value">111 22 Stockholm</span></div>
+      <div class="review-row"><span class="review-label">E-post</span><span class="review-value">erik.lindqvist@example.com</span></div>
+      <div class="review-row"><span class="review-label">Telefonnummer</span><span class="review-value">070 123 45 67</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Anställningsinformation</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Anställningsdatum</span><span class="review-value">2020-01-01</span></div>
+      <div class="review-row"><span class="review-label">Heltid</span><span class="review-value">Ja</span></div>
+      <div class="review-row"><span class="review-label">Grundlön</span><span class="review-value">100 000 kr, från 2020-01-01</span></div>
+      <div class="review-row"><span class="review-label">Lönebidrag</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Annat anställningsstöd</span><span class="review-value">–</span></div>
+      <div class="review-row"><span class="review-label">Fasta tillägg eller förmåner</span><span class="review-value">Nej</span></div>
+      <div class="review-row"><span class="review-label">Kollektivavtalad försäkring</span><span class="review-value">Collectum ITP1</span></div>
+      <div class="review-row"><span class="review-label">Roll/Titel</span><span class="review-value">Designer</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header"><h3>Orsak till uppsägning</h3></div>
+    <div class="review-content">
+      <div class="review-row"><span class="review-label">Orsak</span><span class="review-value">Uppsagd – Arbetsbrist</span></div>
+      <div class="review-row"><span class="review-label">Uppsagd</span><span class="review-value">2026-04-04</span></div>
+      <div class="review-row"><span class="review-label">Anställning upphör</span><span class="review-value">2026-04-04</span></div>
+      <div class="review-row"><span class="review-label">Uppsagd på hur många procent</span><span class="review-value">100 %</span></div>
+    </div>
+  </div>
+
+  <div class="review-section">
+    <div class="review-header">
+      <h3>Övrigt</h3>
+      <a class="review-edit" onclick="goStep(2)">Ändra</a>
+    </div>
+    <div class="review-content">
+      <div class="review-sub-heading" style="border-top:none; padding-top:0; margin-top:0;">Utbildning</div>
+      <div class="review-row"><span class="review-value">Högskola/Universitet</span></div>
+      <div class="review-sub-heading">Sjukersättning</div>
+      <div class="review-row"><span class="review-value">Nej, ingen sjukersättning</span></div>
+      <div class="review-sub-heading">Förtida pension</div>
+      <div class="review-row"><span class="review-value">Nej, ingen förtida pension</span></div>
+      <div class="review-sub-heading">Medlem i a-kassa</div>
+      <div class="review-row"><span class="review-value">Ja, har medlemskap i a-kassa</span></div>
+      <div class="review-sub-heading">Ny anställning</div>
+      <div class="review-row"><span class="review-value">Nej, ingen ny anställning</span></div>
+    </div>
+  </div>
+
+  <div class="consent-box" style="background:var(--color-sea-green-light); border-radius:var(--radius); padding:var(--spacing-s) 20px;">
+    <label style="display:flex; align-items:flex-start; gap:12px;">
+      <input type="checkbox" id="f3-consent" onchange="f3ToggleSubmit()" style="width:22px; height:22px; margin-right:0; flex-shrink:0; accent-color:var(--color-sea-green-dark);">
+      <span>Jag bekräftar att samtliga uppgifter i ansökan är riktiga och samtycker till att TRS behandlar mina personuppgifter enligt <a href="#" style="color:var(--color-sea-green-dark); font-weight:600;">informationen här</a>.</span>
+    </label>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-link" onclick="goStep(2)">‹ Föregående steg</button>
+    <div class="right-buttons"><button class="btn btn-primary" id="f3-submitBtn" disabled onclick="f3Submit()">Spara och skicka in ansökan</button></div>
+  </div>
+</div>
+
+<!-- F3 STEP 4: BEKRÄFTELSE -->
+<div class="step-content" id="f3-step4">
+  <div class="confirmation-page">
+    <div class="confirmation-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Tack! Din ansökan är skickad</h2>
+    <p>Vi har mottagit din ansökan om stöd. En bekräftelse skickas via e-post.</p>
+    <p>Du kommer höra från oss inom kort med information om nästa steg i din omställning.</p>
+  </div>
+</div>
+
+</div><!-- end .main -->
+</div><!-- end #form3 -->
+
 
 <div class="footer">
   <h3>Har du frågor?</h3>
@@ -650,33 +1528,47 @@
 </div>
 
 <script>
-let currentStep = 0;
-const totalSteps = 4;
+let currentForm = 'form1';
+const formConfig = {
+  form1: { totalSteps: 4, currentStep: 0, prefix: '',     stepperId: 'stepperBar',    hideStepperOn: [0, 5] },
+  form2: { totalSteps: 5, currentStep: 0, prefix: 'f2-',  stepperId: 'f2-stepperBar', hideStepperOn: [0, 6] },
+  form3: { totalSteps: 3, currentStep: 1, prefix: 'f3-',  stepperId: 'f3-stepperBar', hideStepperOn: [4] }
+};
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.form === name));
+  document.querySelectorAll('.form-tab').forEach(f => f.classList.toggle('active', f.id === name));
+  currentForm = name;
+  window.scrollTo(0, 0);
+}
 
 function goStep(n) {
-  document.getElementById('step' + currentStep).classList.remove('active');
-  document.getElementById('step' + n).classList.add('active');
-  currentStep = n;
-  // Hide stepper on step 0 (försida) and step 5 (bekräftelse)
-  document.getElementById('stepperBar').classList.toggle('hidden', n === 0 || n === 5);
+  const cfg = formConfig[currentForm];
+  document.getElementById(cfg.prefix + 'step' + cfg.currentStep)?.classList.remove('active');
+  document.getElementById(cfg.prefix + 'step' + n)?.classList.add('active');
+  cfg.currentStep = n;
+  if (cfg.stepperId) {
+    document.getElementById(cfg.stepperId).classList.toggle('hidden', cfg.hideStepperOn.includes(n));
+  }
   updateStepper();
   window.scrollTo(0, 0);
 }
 
 function updateStepper() {
-  // Stepper maps: step1->stepper1, step2->stepper2, step3->stepper3, step4->stepper4
-  for (let i = 1; i <= totalSteps; i++) {
-    const circle = document.getElementById('sc' + i);
-    const label = document.getElementById('sl' + i);
+  const cfg = formConfig[currentForm];
+  for (let i = 1; i <= cfg.totalSteps; i++) {
+    const circle = document.getElementById(cfg.prefix + 'sc' + i);
+    const label = document.getElementById(cfg.prefix + 'sl' + i);
+    if (!circle) continue;
     circle.className = 'step-circle';
     label.className = 'step-label';
     const item = circle.closest('.step-item');
     item.classList.remove('done-line');
-    if (i < currentStep) {
+    if (i < cfg.currentStep) {
       circle.classList.add('done');
       circle.textContent = '\u2713';
       item.classList.add('done-line');
-    } else if (i === currentStep) {
+    } else if (i === cfg.currentStep) {
       circle.classList.add('active');
       circle.textContent = i;
       label.classList.add('active');
@@ -684,6 +1576,129 @@ function updateStepper() {
       circle.textContent = i;
     }
   }
+}
+
+function f2ToggleDeltid() {
+  const val = document.querySelector('input[name="f2-worktime"]:checked')?.value;
+  document.getElementById('f2-deltid-procent').style.display = (val === 'Deltid') ? 'block' : 'none';
+}
+
+function f2UpdateChecklist() {
+  // Items 1-4 required, item 5 ("Eventuellt") is optional
+  const allChecked = ['f2-cl1','f2-cl2','f2-cl3','f2-cl4'].every(id => document.getElementById(id).checked);
+  document.getElementById('f2-startBtn').disabled = !allChecked;
+  document.getElementById('f2-checklist-msg').style.display = allChecked ? 'none' : 'inline';
+}
+
+function f2HamtaPerson() {
+  const pnr = document.getElementById('f2-pnr').value;
+  if (pnr) {
+    document.getElementById('f2-pnr-wrap').classList.add('verified');
+    // Demo: pre-fill name fields when "Hämta info" clicked
+    document.getElementById('f2-fname').value = document.getElementById('f2-fname').value || 'Pia';
+    document.getElementById('f2-lname').value = document.getElementById('f2-lname').value || 'Andersson';
+  }
+}
+
+function f2HamtaOrg() {
+  const org = document.getElementById('f2-orgnr').value;
+  if (org) {
+    document.getElementById('f2-orgnr-result').classList.add('visible');
+  }
+}
+
+function f2ToggleSub(name, show) {
+  document.getElementById('f2-sub-' + name).classList.toggle('visible', show);
+}
+
+function f3ToggleSub(name, show) {
+  document.getElementById('f3-sub-' + name).classList.toggle('visible', show);
+}
+
+function f3ToggleSubmit() {
+  const checked = document.getElementById('f3-consent').checked;
+  document.getElementById('f3-submitBtn').disabled = !checked;
+}
+
+function f3Submit() {
+  goStep(4);
+}
+
+function f3AddEmployment() {
+  const container = document.getElementById('f3-extra-employments');
+  const card = document.createElement('div');
+  card.className = 'field-card';
+  card.innerHTML = `
+    <div class="extra-emp-header">
+      <div class="field-card-label">Ytterligare anställning</div>
+      <button type="button" class="extra-emp-remove" onclick="this.closest('.field-card').remove()">Ta bort</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Organisationsnummer</label><input type="text" placeholder="XXXXXX-XXXX"></div>
+      <div class="form-group"><label>Organisationsnamn</label><input type="text"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:0;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Började anställning</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
+        <label>Slutade anställning</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text">
+        </div>
+      </div>
+    </div>
+  `;
+  container.appendChild(card);
+}
+
+function addEmployment() {
+  const container = document.getElementById('f2-extra-employments');
+  const card = document.createElement('div');
+  card.className = 'field-card';
+  card.innerHTML = `
+    <div class="extra-emp-header">
+      <div class="field-card-label">Ytterligare anst\u00e4llning</div>
+      <button type="button" class="extra-emp-remove" onclick="this.closest('.field-card').remove()">Ta bort</button>
+    </div>
+    <p style="font-size:14px; line-height:1.5; margin-bottom:var(--spacing-s); color:#555;">Eftersom du beh\u00f6ver ha varit anst\u00e4lld minst 12 m\u00e5nader de senaste 36 m\u00e5naderna f\u00f6r att kunna f\u00e5 st\u00f6d fr\u00e5n TRS beh\u00f6ver du ange ytterligare anst\u00e4llningar.</p>
+    <div class="form-row">
+      <div class="form-group"><label>Organisationsnummer</label><input type="text" placeholder="XXXXXX-XXXX"></div>
+      <div class="form-group"><label>Organisationsnamn</label><input type="text"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>B\u00f6rjade anst\u00e4llning</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Anst\u00e4llning upph\u00f6rde</label>
+        <div class="date-input-wrap">
+          <svg class="date-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3"/></svg>
+          <input type="text">
+        </div>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Bifoga arbetsgivarintyg</label>
+      <div class="file-upload-zone" onclick="this.querySelector('input[type=file]').click()">
+        <div class="file-upload-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="30" x2="26" y2="30"/></svg></div>
+        <div class="file-upload-text">Dra och sl\u00e4pp din fil h\u00e4r</div>
+        <div class="file-upload-link">V\u00e4lj fil</div>
+        <div class="file-upload-max">Max 15 MB</div>
+        <input type="file" style="display:none" accept=".pdf,.jpg,.png,.doc,.docx">
+      </div>
+    </div>
+  `;
+  container.appendChild(card);
 }
 
 function updateChecklist() {
