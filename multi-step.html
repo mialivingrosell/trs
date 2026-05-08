@@ -68,8 +68,7 @@
   .field-card-label { font-size: 19px; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--color-black); margin-bottom: var(--spacing-s); }
 
   /* Checklist step */
-  .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid #e5e7eb; font-size: 16px; line-height: 24px; flex-wrap: wrap; }
-  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; font-size: 16px; line-height: 24px; flex-wrap: wrap; }
   .checklist-item input[type="checkbox"] { width: 22px; height: 22px; flex-shrink: 0; accent-color: var(--color-sea-green); cursor: pointer; }
   .checklist-item label { cursor: pointer; flex: 1; }
   .checklist-intro { font-family: var(--font-body); font-size: 17px; margin-bottom: var(--spacing-r); line-height: 26px; }
@@ -146,6 +145,17 @@
   .percent-input-wrap input { padding-right: 36px; width: 100%; }
   .percent-input-wrap .percent-suffix { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-grey-dark); font-size: 16px; }
 
+  /* Förhandlingsprotokoll alternative content */
+  .fhp-content { margin-top: var(--spacing-s); }
+  .fhp-info-box { background: var(--color-white); border-radius: var(--radius-sm); padding: var(--spacing-s) 18px; }
+  .fhp-info-box p { font-size: 15px; line-height: 1.5; margin: 0; }
+  .prev-docs-box { background: var(--color-white); border-radius: var(--radius-sm); padding: 12px 18px; }
+  .prev-doc-item { display: flex; align-items: center; gap: 14px; padding: 8px 0; cursor: pointer; transition: opacity 0.15s; }
+  .prev-doc-item input[type="checkbox"] { width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--color-blue-dark); cursor: pointer; }
+  .prev-doc-item.dimmed { opacity: 0.45; }
+  .prev-doc-name { font-weight: 500; font-size: 16px; }
+  .prev-doc-date { font-style: italic; color: #666; font-size: 14px; }
+
   /* File upload drop zone */
   .file-upload-zone { border: 2px dashed #b0c4c3; border-radius: var(--radius); background: var(--color-white); padding: 32px; text-align: center; margin-top: 12px; cursor: pointer; transition: border-color 0.2s, background 0.2s; }
   .file-upload-zone:hover { border-color: var(--color-sea-green); background: #f0f7f7; }
@@ -159,7 +169,7 @@
 
   /* Review cards */
   .review-section { border: 1px solid #ddd; border-radius: var(--radius); padding: 20px var(--spacing-r); margin-bottom: 20px; }
-  .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee; }
+  .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .review-header h3 { margin: 0; font-size: 18px; }
   .review-edit { color: var(--color-sea-green-dark); text-decoration: none; font-size: 16px; cursor: pointer; font-weight: 500; }
   .review-edit:hover { text-decoration: underline; }
@@ -168,7 +178,7 @@
   .review-row { display: flex; padding: 6px 0; }
   .review-label { flex: 0 0 200px; font-size: 16px; color: #666; }
   .review-value { flex: 1; font-size: 16px; color: var(--color-black); }
-  .review-sub-heading { font-weight: 600; font-size: 15px; color: var(--color-black); margin-top: 16px; margin-bottom: 8px; padding-top: 12px; border-top: 1px solid #eee; }
+  .review-sub-heading { font-weight: 600; font-size: 15px; color: var(--color-black); margin-top: 16px; margin-bottom: 8px; }
   .consent-box { margin: var(--spacing-r) 0; }
   .consent-box label { font-size: 16px; line-height: 24px; cursor: pointer; }
   .consent-box input { margin-right: 10px; accent-color: var(--color-sea-green-dark); }
@@ -449,24 +459,45 @@
     </div>
   </div>
 
-  <!-- Förhandlingsprotokoll upload -->
+  <!-- Förhandlingsprotokoll -->
   <div class="field-card">
     <div class="field-card-label">Förhandlingsprotokoll eller motsvarande dokument</div>
     <p style="font-size:15px; line-height:1.5; margin-bottom:var(--spacing-s);">Utan förhandlingsprotokoll behöver du ladda upp ett uppsägningsbevis eller annat dokument som styrker uppsägningen. Andra formella handlingar är uppgifter om lönegaranti vid konkurs och intyg som stärker sjukdom/ohälsa och arbetsförmågans omfattning (vid uppsägning på grund av sjukdom).</p>
-    <div class="file-upload-zone" id="fhp-step1-upload" onclick="this.querySelector('input[type=file]').click()">
-      <div class="file-upload-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="30" x2="26" y2="30"/></svg></div>
-      <div class="file-upload-text">Dra och släpp din fil här</div>
-      <div class="file-upload-link">Välj fil</div>
-      <div class="file-upload-max">Max 15 MB</div>
-      <input type="file" style="display:none" accept=".pdf,.jpg,.png,.doc,.docx">
+
+    <div class="radio-group" style="margin-bottom:0;">
+      <label class="radio-option"><input type="radio" name="fhp-option" value="upload" checked onchange="updateFhpOption()"> Jag vill ladda upp ett nytt dokument</label>
+      <label class="radio-option"><input type="radio" name="fhp-option" value="previous" onchange="updateFhpOption()"> Jag vill använda ett tidigare uppladdat dokument</label>
+      <label class="radio-option"><input type="radio" name="fhp-option" value="cant" onchange="updateFhpOption()"> Jag kan inte bifoga ett förhandlingsprotokoll eller motsvarande dokument</label>
     </div>
-    <div style="margin-top:16px;">
-      <label class="checkbox-option" style="display:flex; align-items:flex-start; gap:12px;">
-        <input type="checkbox" id="no-fhp" onchange="toggleNoFhp()" style="width:22px; height:22px; margin-right:0; flex-shrink:0;">
-        <span>Jag kan inte bifoga ett förhandlingsprotokoll eller motsvarande dokument</span>
-      </label>
-      <div id="no-fhp-info" style="display:none; margin-top:12px; padding:var(--spacing-s); background:var(--color-white); border-radius:var(--radius-sm); border:1px solid #ddd;">
-        <p style="font-size:15px; line-height:1.5; margin:0;">Kontakta vår kundtjänst på <strong>08 442 97 30</strong> eller <strong>trygghetsradet.trs@trs.se</strong> så hjälper vi dig vidare med din ansökan.</p>
+
+    <div class="fhp-content" id="fhp-content-upload">
+      <div class="file-upload-zone" id="fhp-step1-upload" onclick="this.querySelector('input[type=file]').click()">
+        <div class="file-upload-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="6" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="30" x2="26" y2="30"/></svg></div>
+        <div class="file-upload-text">Dra och släpp din fil här</div>
+        <div class="file-upload-link">Välj fil</div>
+        <div class="file-upload-max">Max 15 MB</div>
+        <input type="file" style="display:none" accept=".pdf,.jpg,.png,.doc,.docx">
+      </div>
+    </div>
+
+    <div class="fhp-content" id="fhp-content-previous" style="display:none;">
+      <div class="prev-docs-box">
+        <label class="prev-doc-item">
+          <input type="checkbox" name="prev-doc" value="dok1" onchange="updatePrevDoc(this)">
+          <span class="prev-doc-name">Dokument1.pdf</span>
+          <span class="prev-doc-date">Uppladdat 2026-04-15</span>
+        </label>
+        <label class="prev-doc-item">
+          <input type="checkbox" name="prev-doc" value="dok2" onchange="updatePrevDoc(this)">
+          <span class="prev-doc-name">Dokument2.pdf</span>
+          <span class="prev-doc-date">Uppladdat 2022-03-01</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="fhp-content" id="fhp-content-cant" style="display:none;">
+      <div class="fhp-info-box">
+        <p>Ett förhandlingsprotokoll eller motsvarande behövs för att ansökan ska kunna behandlas. Vänta helst med att göra ansökan tills dokumentet är klart. Om du går vidare med ansökan utan att bifoga ett förhandlingsprotokoll eller motsvarande dokument behöver vi kontakta dig för komplettering vid ett senare tillfälle.</p>
       </div>
     </div>
   </div>
@@ -763,10 +794,10 @@
 <!-- F2 STEP 0: FÖRSIDA (ej i stepper) -->
 <div class="step-content active" id="f2-step0">
   <h2>Ansökan tidsbegränsad anställning upphör</h2>
-  <p style="font-weight:600; font-size:17px; margin-bottom:6px;">Detta behöver du för att fullfölja ansökan.</p>
-  <p style="font-size:15px; line-height:1.5; margin-bottom:var(--spacing-r);">Kontrollera att du har följande uppgifter tillgängliga innan du börjar. Kryssa i varje punkt för att bekräfta.</p>
 
   <div class="field-card">
+    <div class="field-card-label">Det här behöver du ha tillhands för att kunna skicka in ansökan</div>
+    <p style="font-size:15px; margin-bottom:var(--spacing-s); line-height:1.5;">Kontrollera att du har följande uppgifter tillgängliga innan du börjar. Kryssa i varje punkt för att bekräfta.</p>
     <div class="checklist-item">
       <input type="checkbox" id="f2-cl1" onchange="f2UpdateChecklist()">
       <label for="f2-cl1">Organisationsnummer till din senaste arbetsgivare</label>
@@ -1206,7 +1237,7 @@
 <!-- ============================================================ -->
 <div class="form-tab" id="form3">
 
-<div class="stepper-bar" id="f3-stepperBar">
+<div class="stepper-bar hidden" id="f3-stepperBar">
   <div class="stepper">
     <div class="step-item" data-step="1">
       <div class="step-circle active" id="f3-sc1">1</div>
@@ -1225,8 +1256,27 @@
 
 <div class="main">
 
+<!-- F3 STEP 0: FÖRSIDA (ej i stepper) -->
+<div class="step-content active" id="f3-step0">
+  <h2>Komplettera din ansökan</h2>
+  <p style="font-weight:500; font-size:19px; line-height:1.5; margin-bottom:var(--spacing-r);">Välkommen till TRS! Nu har du påbörjat resan till ditt nya jobb. Med dig på resan får du en rådgivare som hjälper dig med det stöd just du behöver.</p>
+
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-s);">Om du har blivit uppsagd måste du godkänna den ansökan din arbetsgivare har gjort för din räkning.</p>
+
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-s);">När du kompletterat din ansökan kan du använda Mina sidor, där du hittar en hel del som du kan ha nytta av när du ska ta ditt nästa steg. Bland annat hittar du webbinarier och seminarier som TRS anordnar – varmt välkommen att anmäla dig! Du kan också uppdatera dina kontaktuppgifter på Mina sidor.</p>
+
+  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">Du kan själv kontakta din rådgivare via "Boka första mötet med din rådgivare" på Mina sidor. Om du inte hör av dig kommer din rådgivare att kontakta dig.</p>
+
+  <div class="bottom-bar">
+    <div></div>
+    <div class="right-buttons">
+      <button class="btn btn-primary" onclick="goStep(1)">Komplettera din ansökan →</button>
+    </div>
+  </div>
+</div>
+
 <!-- F3 STEP 1: GRANSKA LÄMNADE UPPGIFTER -->
-<div class="step-content active" id="f3-step1">
+<div class="step-content" id="f3-step1">
   <h2>Granska lämnade uppgifter</h2>
   <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">Här är uppgifterna som din arbetsgivare har skickat in till TRS. Kontrollera att allt stämmer innan du går vidare.</p>
 
@@ -1279,15 +1329,8 @@
     </div>
   </div>
 
-  <h3 style="margin-top:32px;">Tidigare anställningar inom TRS-område</h3>
-  <p style="font-size:17px; line-height:1.6; margin-bottom:var(--spacing-r);">Om du har varit tidsbegränsat anställd och vill åberopa fler anställningar inom TRS-område kan du ange dem här. Ange organisationsnummer så ser vi om det är en ansluten organisation.</p>
-
-  <div id="f3-extra-employments"></div>
-
-  <button type="button" class="btn btn-secondary" onclick="f3AddEmployment()">+ Lägg till fler anställningar</button>
-
   <div class="bottom-bar">
-    <div></div>
+    <button class="btn btn-link" onclick="goStep(0)">‹ Föregående steg</button>
     <div class="right-buttons"><button class="btn btn-primary" onclick="goStep(2)">Nästa steg →</button></div>
   </div>
 </div>
@@ -1379,11 +1422,8 @@
             <label>Din nya anställningsform</label>
             <select>
               <option value="">Välj anställningsform</option>
-              <option value="Tillsvidareanställning">Tillsvidareanställning</option>
-              <option value="Tidsbegränsad anställning">Tidsbegränsad anställning</option>
-              <option value="Provanställning">Provanställning</option>
-              <option value="Visstidsanställning">Visstidsanställning</option>
-              <option value="Annat">Annat</option>
+              <option value="Tidsbegränsad">Tidsbegränsad (även provanställning)</option>
+              <option value="Tillsvidare">Tillsvidare</option>
             </select>
           </div>
           <div class="form-group">
@@ -1405,6 +1445,14 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="field-card">
+    <div class="radio-group" style="margin-bottom:0;">
+      <label>Har du skyddade personuppgifter?</label>
+      <label class="radio-option"><input type="radio" name="f3-skyddade" value="Nej" checked> Nej</label>
+      <label class="radio-option"><input type="radio" name="f3-skyddade" value="Ja"> Ja</label>
     </div>
   </div>
 
@@ -1494,9 +1542,13 @@
   </div>
 
   <div class="consent-box" style="background:var(--color-sea-green-light); border-radius:var(--radius); padding:var(--spacing-s) 20px;">
-    <label style="display:flex; align-items:flex-start; gap:12px;">
+    <label style="display:flex; align-items:flex-start; gap:12px; margin-bottom:12px;">
       <input type="checkbox" id="f3-consent" onchange="f3ToggleSubmit()" style="width:22px; height:22px; margin-right:0; flex-shrink:0; accent-color:var(--color-sea-green-dark);">
       <span>Jag bekräftar att samtliga uppgifter i ansökan är riktiga och samtycker till att TRS behandlar mina personuppgifter enligt <a href="#" style="color:var(--color-sea-green-dark); font-weight:600;">informationen här</a>.</span>
+    </label>
+    <label style="display:flex; align-items:flex-start; gap:12px;">
+      <input type="checkbox" id="f3-consent-tvist" style="width:22px; height:22px; margin-right:0; flex-shrink:0; accent-color:var(--color-sea-green-dark);">
+      <span>Jag intygar att jag inte kommer ta uppsägningen till tvist. Det är en förutsättning för att kunna få stöd från TRS.</span>
     </label>
   </div>
 
@@ -1532,7 +1584,7 @@ let currentForm = 'form1';
 const formConfig = {
   form1: { totalSteps: 4, currentStep: 0, prefix: '',     stepperId: 'stepperBar',    hideStepperOn: [0, 5] },
   form2: { totalSteps: 5, currentStep: 0, prefix: 'f2-',  stepperId: 'f2-stepperBar', hideStepperOn: [0, 6] },
-  form3: { totalSteps: 3, currentStep: 1, prefix: 'f3-',  stepperId: 'f3-stepperBar', hideStepperOn: [4] }
+  form3: { totalSteps: 3, currentStep: 0, prefix: 'f3-',  stepperId: 'f3-stepperBar', hideStepperOn: [0, 4] }
 };
 
 function switchTab(name) {
@@ -1721,10 +1773,22 @@ function updateOrsak() {
   document.getElementById('lonegaranti-card').style.display = (val === 'konkurs') ? 'block' : 'none';
 }
 
-function toggleNoFhp() {
-  const checked = document.getElementById('no-fhp').checked;
-  document.getElementById('no-fhp-info').style.display = checked ? 'block' : 'none';
-  document.getElementById('fhp-step1-upload').style.display = checked ? 'none' : 'block';
+function updateFhpOption() {
+  const val = document.querySelector('input[name="fhp-option"]:checked').value;
+  document.getElementById('fhp-content-upload').style.display   = val === 'upload'   ? 'block' : 'none';
+  document.getElementById('fhp-content-previous').style.display = val === 'previous' ? 'block' : 'none';
+  document.getElementById('fhp-content-cant').style.display     = val === 'cant'     ? 'block' : 'none';
+}
+
+function updatePrevDoc(checkbox) {
+  const all = document.querySelectorAll('input[name="prev-doc"]');
+  if (checkbox.checked) {
+    all.forEach(cb => { if (cb !== checkbox) cb.checked = false; });
+  }
+  const anyChecked = Array.from(all).some(cb => cb.checked);
+  all.forEach(cb => {
+    cb.closest('.prev-doc-item').classList.toggle('dimmed', anyChecked && !cb.checked);
+  });
 }
 
 function toggleNoLg() {
